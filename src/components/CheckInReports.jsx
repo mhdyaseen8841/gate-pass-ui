@@ -194,7 +194,6 @@ const CheckInReports = () => {
               >
                 <MenuItem value="pdf">PDF</MenuItem>
                 <MenuItem value="excel">Excel</MenuItem>
-                <MenuItem value="csv">CSV</MenuItem>
               </Select>
             </Grid>
             <Grid item xs={12} sm={4} md={2}>

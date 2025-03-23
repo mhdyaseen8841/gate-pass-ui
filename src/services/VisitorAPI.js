@@ -51,3 +51,50 @@ export async function visitEntry(data) {
     throw error;
   }
 }
+
+export async function getPurpose() {
+  try {
+    const response = await API_INSTANCE.get('/getPurpose');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPerson(company_id) {
+  try {
+    const response = await API_INSTANCE.get('/getPerson', {
+      params: { company_id },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getCompany() {
+  try {
+    const response = await API_INSTANCE.get('/getCompany');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addPurpose(user, purpose) {
+  try {
+    const response = await API_INSTANCE.post('/addPurpose', { user, purpose });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addPerson(company_id, person_name, user) {
+  try {
+    const response = await API_INSTANCE.post('/addPerson', { company_id, person_name, user });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

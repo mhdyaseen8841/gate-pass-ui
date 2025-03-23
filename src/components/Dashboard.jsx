@@ -189,22 +189,6 @@ const VisitorManagementSystem = () => {
     // setView("dashboard");
   };
 
-  // Handle check-out
-  const handleCheckOut = (id) => {
-    const updatedVisitors = visitors.map((visitor) =>
-      visitor.id === id
-        ? { ...visitor, checkOutTime: new Date().toISOString() }
-        : visitor
-    );
-    setVisitors(updatedVisitors);
-  };
-
-  // Print visitor badge
-  const handlePrintVisitor = (visitor) => {
-    setSelectedVisitor(visitor);
-    setPrintDialogOpen(true);
-  };
-
   // Format date for display
   const formatDateTime = (dateString) => {
     if (!dateString) return "N/A";

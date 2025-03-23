@@ -138,7 +138,6 @@ const filteredVisitors = visitorList.filter((visitor) => {
   const fetchDashboardData = async () => {
     try {
       const data = await getVisitorDashboard();
-      console.log(data);
       const currentVisitors = data.filter(visitor => visitor.check_out_time === null).length;
       const checkedOutVisitors = data.filter(visitor => visitor.check_out_time !== null).length;
       const totalVisitorsToday = data.length; 

@@ -63,8 +63,9 @@ const CurrentVisitorReports = () => {
     { id: 'visit_id', label: 'Visit ID', numeric: true },
     { id: 'name', label: 'Name', numeric: false },
     { id: 'company', label: 'Company', numeric: false },
-    { id: 'checkInTime', label: 'Check-In Time', numeric: false },
     { id: 'personToVisit', label: 'Person To Visit', numeric: false },
+    { id: 'purpose', label: 'Purpose', numeric: false },
+    { id: 'checkInTime', label: 'Check-In Time', numeric: false },
   ];
 
   return (
@@ -101,8 +102,9 @@ const CurrentVisitorReports = () => {
                     <TableCell align="right">{row.visit_id}</TableCell>
                     <TableCell>{row.visitor_name}</TableCell>
                     <TableCell>{row.company}</TableCell>
-                    <TableCell>{row.check_in_time}</TableCell>
                     <TableCell>{row.person_to_visit}</TableCell>
+                    <TableCell>{row.purpose}</TableCell>
+                    <TableCell>{row.check_in_time}</TableCell>
                     <TableCell>
                     </TableCell>
                   </TableRow>

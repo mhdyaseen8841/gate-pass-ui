@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {
   AppBar,
@@ -10,30 +10,14 @@ import {
   Grid,
   TextField,
   Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Card,
-  CardContent,
-  InputAdornment,
-  IconButton,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Divider,
-  Stack,
   FormControlLabel,
   Radio,
   RadioGroup,
-  FormLabel,
-  CardMedia,
-  Dialog,
-  DialogTitle,
-  DialogContent,
+  FormLabel
 } from "@mui/material";
 import synthiteLogo from '../assets/Synthite.png';
 import SearchIcon from "@mui/icons-material/Search";
@@ -46,6 +30,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import ImageUploadComponent from "./ImageUploadComponent";
 import { useReactToPrint } from "react-to-print";
 import Reports from "./Reports";
+import DashboardReports from "./DashboardReports";
 
 const theme = createTheme({
   palette: {
@@ -138,15 +123,7 @@ const VisitorManagementSystem = () => {
   const [selectedVisitor, setSelectedVisitor] = useState(null);
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
   
-  const printComponentRef = useRef();
-  const reactToPrintFn = useReactToPrint({
-    content: () => printComponentRef.current,
-  });
-
-  const handlePrint = useReactToPrint({
-    documentTitle: 'Title',
-    contentRef: printComponentRef,
- })
+ 
   // Load sample data
   useEffect(() => {
      const sampleVisitors = [
@@ -288,139 +265,7 @@ const VisitorManagementSystem = () => {
         <Container sx={{ py: 4, flexGrow: 1 }}>
           {/* Dashboard View */}
           {view === "dashboard" && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-              {/* Stats Cards */}
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
-                  <Card elevation={2}>
-                    <CardContent>
-                      <Typography variant="subtitle1" color="text.secondary">
-                        Current Visitors
-                      </Typography>
-                      <Typography variant="h4" color="primary" sx={{ mt: 1 }}>
-                        {currentVisitors}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Card elevation={2}>
-                    <CardContent>
-                      <Typography variant="subtitle1" color="text.secondary">
-                        Total Visitors Today
-                      </Typography>
-                      <Typography variant="h4" color="secondary" sx={{ mt: 1 }}>
-                        {totalVisitorsToday}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Card elevation={2}>
-                    <CardContent>
-                      <Typography variant="subtitle1" color="text.secondary">
-                        Checked Out
-                      </Typography>
-                      <Typography variant="h4" sx={{ mt: 1, color: "#9c27b0" }}>
-                        {checkedOutVisitors}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-
-              {/* Search Box */}
-              <TextField
-                fullWidth
-                placeholder="Search visitors by name, personToVisit, or badge..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                sx={{ mb: 3 }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
-              {/* Visitors Table */}
-              <Paper elevation={2}>
-                <Box sx={{ p: 2, bgcolor: "#f9f9f9" }}>
-                  <Typography variant="h6">Visitor Log</Typography>
-                </Box>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Company</TableCell>
-                        <TableCell>PersonToVisit</TableCell>
-                        <TableCell>Purpose</TableCell>
-                        <TableCell>Check In</TableCell>
-                        <TableCell>Check Out</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {filteredVisitors.map((visitor) => (
-                        <TableRow
-                          key={visitor.id}
-                          sx={{
-                            bgcolor: !visitor.checkOutTime
-                              ? "#e3f2fd"
-                              : "inherit",
-                          }}
-                        >
-                          <TableCell>{visitor.name}</TableCell>
-                          
-                        <TableCell>{visitor.company}</TableCell>
-                          <TableCell>{visitor.personToVisit}</TableCell>
-                          <TableCell>{visitor.purpose}</TableCell>
-                          <TableCell>
-                            {formatDateTime(visitor.checkInTime)}
-                          </TableCell>
-                          <TableCell>
-                            {formatDateTime(visitor.checkOutTime)}
-                          </TableCell>
-                          
-                          <TableCell>
-                            <Box sx={{ display: 'flex', gap: 1 }}>
-                          
-                             <Button
-                             variant="contained"
-                             size="small"
-                             startIcon={<LogoutIcon />}
-                             disabled={visitor.checkOutTime!=null}
-                             sx={{
-                               bgcolor: "#9c27b0",
-                               "&:hover": { bgcolor: "#7b1fa2" },
-                             }}
-                             onClick={() => handleCheckOut(visitor.id)}
-                           >
-                             Check Out
-                           </Button>
-                             
-                             
-                              <Button
-                                variant="contained"
-                                size="small"
-                                // startIcon={<MoreHorizIcon />}
-                                color="primary"
-                                onClick={() => handlePrintVisitor(visitor)}
-                              >
-                                <MoreHorizIcon />
-                              </Button>
-                            </Box>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Paper>
-            </Box>
+           <DashboardReports/>
           )}
 
           {/* Check In Form */}
@@ -608,33 +453,6 @@ const VisitorManagementSystem = () => {
          
         </Container>
 
-        {/* Print Dialog */}
-        <Dialog 
-  open={printDialogOpen} 
-  onClose={() => setPrintDialogOpen(false)}
-  maxWidth="md"
-  fullWidth
->
-  <DialogTitle>
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Typography variant="h6">Print Visitor Badge</Typography>
-      <Button
-        variant="contained"
-        startIcon={<PrintIcon />}
-        onClick={handlePrint}
-      >
-        Print
-      </Button>
-    </Box>
-  </DialogTitle>
-  <DialogContent>
-    <div id="printable-content">
-      {selectedVisitor && (
-        <VisitorPrintTemplate ref={printComponentRef} visitor={selectedVisitor} />
-      )}
-    </div>
-  </DialogContent>
-</Dialog>
 
         {/* Footer */}
         <Box sx={{ bgcolor: "#212121", color: "white", py: 2, mt: "auto" }}>

@@ -33,11 +33,13 @@ import { useReactToPrint } from "react-to-print";
 
 
 
-const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => (
+const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => 
+    {
+    return(
   <div ref={ref} style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
     <div style={{ textAlign: "center", marginBottom: "20px" }}>
       <h1 style={{ margin: "0" }}>Visitor Badge</h1>
-      <p style={{ margin: "5px 0" }}>Company Name Inc.</p>
+      <p style={{ margin: "5px 0" }}>Syntite</p>
     </div>
 
     <div style={{ border: "2px solid #000", padding: "15px", borderRadius: "5px" }}>
@@ -47,7 +49,11 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => (
           <h3 style={{ margin: "0" }}>{visitor.badge}</h3>
         </div>
         <div style={{ width: "100px", height: "100px", border: "1px solid #ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span>Photo</span>
+          {visitor.photo ? (
+            <img src={visitor.photo} alt="Visitor" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            <span>Photo</span>
+          )}
         </div>
       </div>
 
@@ -55,15 +61,15 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => (
         <tbody>
           <tr>
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Name:</td>
-            <td style={{ padding: "5px 0" }}>{visitor.name}</td>
+            <td style={{ padding: "5px 0" }}>{visitor.visitor_name}</td>
           </tr>
           <tr>
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Company:</td>
-            <td style={{ padding: "5px 0" }}>External Company</td>
+            <td style={{ padding: "5px 0" }}>{visitor.company}</td>
           </tr>
           <tr>
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>personToVisit:</td>
-            <td style={{ padding: "5px 0" }}>{visitor.personToVisit}</td>
+            <td style={{ padding: "5px 0" }}>{visitor.person_to_visit}</td>
           </tr>
           <tr>
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Purpose:</td>
@@ -71,7 +77,12 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => (
           </tr>
           <tr>
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-in Time:</td>
-            <td style={{ padding: "5px 0" }}>{new Date(visitor.checkInTime).toLocaleString()}</td>
+            <td style={{ padding: "5px 0" }}>{new Date(visitor.check_in_time).toLocaleString()}</td>
+          </tr>
+
+          <tr>
+            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-out Time:</td>
+            <td style={{ padding: "5px 0" }}>{new Date(visitor.check_out_time).toLocaleString()}</td>
           </tr>
         </tbody>
       </table>
@@ -86,7 +97,7 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => (
       <p>For security assistance, please call 555-123-4567</p>
     </div>
   </div>
-));
+)});
 
 
 const DashboardReports = () => {
@@ -352,7 +363,7 @@ const filteredVisitors = visitorList.filter((visitor) => {
 >
   <DialogTitle>
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Typography variant="h6">Print Visitor Badge</Typography>
+      <Typography variant="h6">Print Visitor Slip</Typography>
       <Button
         variant="contained"
         startIcon={<PrintIcon />}

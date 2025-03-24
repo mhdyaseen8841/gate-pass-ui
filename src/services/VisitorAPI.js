@@ -54,7 +54,7 @@ export async function visitEntry(data) {
 
 export async function getPurpose() {
   try {
-    const response = await API_INSTANCE.get('/getPurpose');
+    const response = await VISITOR_INSTANCE.get('/getPurpose');
     return response.data;
   } catch (error) {
     throw error;
@@ -63,7 +63,7 @@ export async function getPurpose() {
 
 export async function getPerson(company_id) {
   try {
-    const response = await API_INSTANCE.get('/getPerson', {
+    const response = await VISITOR_INSTANCE.get('/getPerson', {
       params: { company_id },
     });
     return response.data;
@@ -74,25 +74,25 @@ export async function getPerson(company_id) {
 
 export async function getCompany() {
   try {
-    const response = await API_INSTANCE.get('/getCompany');
+    const response = await VISITOR_INSTANCE.get('/getCompany');
     return response.data;
   } catch (error) {
     throw error;
   }
 }
 
-export async function addPurpose(user, purpose) {
+export async function addPurpose(purpose,user="admin" ) {
   try {
-    const response = await API_INSTANCE.post('/addPurpose', { user, purpose });
+    const response = await VISITOR_INSTANCE.post('/addPurpose', { user, purpose });
     return response.data;
   } catch (error) {
     throw error;
   }
 }
 
-export async function addPerson(company_id, person_name, user) {
+export async function addPerson(company_id, person_name, user="admin") {
   try {
-    const response = await API_INSTANCE.post('/addPerson', { company_id, person_name, user });
+    const response = await VISITOR_INSTANCE.post('/addPerson', { company_id, person_name, user });
     return response.data;
   } catch (error) {
     throw error;

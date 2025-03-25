@@ -204,7 +204,7 @@ const CheckIn = ({setView}) => {
             onChange={handleInputChange}
             multiline
             rows={4}
-            placeholder="Enter additional details..."
+            placeholder="Enter address..."
             variant="outlined"
             margin="normal"
           />

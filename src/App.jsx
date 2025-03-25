@@ -4,24 +4,19 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { VisitorProvider } from './contexts/VisitorContext';
 import './App.css';
 import VisitorManagementSystem from './components/Dashboard';
+import Login from './components/login';
 
 function App() {
   return (
     <VisitorProvider>
-      {/* <Router>
+      <Router>
         <div className="App">
-          <Header />
-          <div className="container mx-auto px-4 py-8">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/check-in" element={<VisitorForm />} />
-              <Route path="/visitors" element={<VisitorList />} />
+              <Route path="/" element={  <VisitorManagementSystem/>} />
+              <Route path="/login" element={<Login/>} />
             </Routes>
           </div>
-        </div>
-      </Router> */}
-
-      <VisitorManagementSystem/>
+      </Router>
     </VisitorProvider>
   );
 }

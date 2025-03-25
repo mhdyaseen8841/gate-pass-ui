@@ -1,22 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
-  Button,
   Container,
   Box,
 } from "@mui/material";
-import synthiteLogo from "../assets/Synthite.png";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import AssessmentIcon from "@mui/icons-material/Assessment";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-
 import Reports from "./Reports";
 import DashboardReports from "./DashboardReports";
 import CheckIn from "./CheckIn";
-
+import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 const theme = createTheme({
   palette: {
     primary: {
@@ -29,9 +22,15 @@ const theme = createTheme({
 });
 
 const VisitorManagementSystem = () => {
-  // State for visitors and form
-
+  
+ const navigate = useNavigate();
   const [view, setView] = useState("dashboard"); 
+
+  // useEffect(() => {
+  //   if (!localStorage.getItem("token")) {
+  //     navigate("/login");
+  //   }
+  // }, [navigate]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -44,38 +43,10 @@ const VisitorManagementSystem = () => {
         }}
       >
         {/* Header */}
-        <AppBar position="static">
-          <Toolbar>
-            {/* <img src={synthiteLogo} alt="abc" style={{width:"100px", height:"100px"}} /> */}
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Gate Pass System
-            </Typography>
-            <Button
-              color="inherit"
-              onClick={() => setView("dashboard")}
-              startIcon={<DashboardIcon />}
-            >
-              Dashboard
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => setView("checkIn")}
-              startIcon={<PersonAddIcon />}
-              sx={{ mx: 1 }}
-            >
-              Check In
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => setView("reports")}
-              startIcon={<AssessmentIcon />}
-            >
-              Reports
-            </Button>
-          </Toolbar>
-        </AppBar>
+       
 
-        {/* Main Content */}
+        <Navbar setView={setView}/>
+
         <Container sx={{ py: 4, flexGrow: 1 }}>
           {/* Dashboard View */}
           {view === "dashboard" && <DashboardReports />}

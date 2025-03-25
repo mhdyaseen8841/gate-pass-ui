@@ -27,8 +27,9 @@ import {
 import ImageUploadComponent from "./ImageUploadComponent";
 import AddDialog from "./AddDialog";
 import DropdownSearch from "./DropDownSearch";
+import { Business, Email, Person, Phone } from "@mui/icons-material";
 
-const CheckIn = () => {
+const CheckIn = ({setView}) => {
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [currentVisitor, setCurrentVisitor] = useState({
     name: "",
@@ -51,8 +52,8 @@ const CheckIn = () => {
     getPersonByCompanyId(selectedCompanyId);
   }
 
-  async function addPurpose(purpose_name) {
-    const data = await addPurpose(purpose_name);
+  async function addPurposeName(purpose_name) {
+   await addPurpose(purpose_name);
     fetchPurpose();
   }
 
@@ -102,11 +103,7 @@ const CheckIn = () => {
 
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
-      <Grid container>
-        <Grid item xs={12} md={6}>
-          <Grid container spacing={2} direction="column">
-            <Grid item>
-            <Typography 
+      <Typography 
           variant="h4" 
           gutterBottom 
           sx={{ 
@@ -118,44 +115,59 @@ const CheckIn = () => {
         >
           Visitor Check-In
         </Typography>
+      <Grid container spacing={2} flexDirection={{ xs: "column-reverse", md: "row" }}>
+        
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={2} direction="column">
+            <Grid item>
+            
             </Grid>
 
             <Grid item>
               <TextField
                 fullWidth
-                label="Name"
+                label="Full Name"
                 name="name"
                 value={currentVisitor.name}
                 onChange={handleInputChange}
                 required
+                  InputProps={{
+                                    startAdornment: <Person sx={{ color: 'action.active', mr: 1 }} />
+                                  }}
               />
             </Grid>
 
             <Grid item>
               <TextField
                 fullWidth
-                label="Email"
+                label="Email Address"
                 name="email"
                 type="email"
                 value={currentVisitor.email}
                 onChange={handleInputChange}
+                 InputProps={{
+                  startAdornment: <Email sx={{ color: 'action.active', mr: 1 }} />
+                   }}
               />
             </Grid>
 
             <Grid item>
               <TextField
                 fullWidth
-                label="Phone"
+                label="Phone Number"
                 name="phone"
                 value={currentVisitor.phone}
                 onChange={handleInputChange}
                 required
+                 InputProps={{
+                    startAdornment: <Phone sx={{ color: 'action.active', mr: 1 }} />
+                   }}
               />
             </Grid>
           </Grid>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} >
           <ImageUploadComponent handleImageChange={handleImageChange} />
         </Grid>
       </Grid>
@@ -167,8 +179,8 @@ const CheckIn = () => {
               row
               name="visitorType"
 
-              // value={visitorType}
-              // onChange={handleRadioChange}
+             value={currentVisitor.visitorType}
+             onChange={handleInputChange}
             >
               <FormControlLabel
                 value="individual"
@@ -212,7 +224,7 @@ const CheckIn = () => {
             <AddDialog
               label="purpose"
               stateName="purpose"
-              addData={addPurpose}
+              addData={addPurposeName}
               setData={setPurpose}
               setCurrentVisitor={setCurrentVisitor}
             />
@@ -235,6 +247,7 @@ const CheckIn = () => {
                 getPersonByCompanyId(selectedCompany.company_id);
                 handleInputChange(e);
               }}
+              startAdornment={<Business />}
             >
               {companies.map((c) => (
                 <MenuItem key={c.company_id} value={c.company_name}>

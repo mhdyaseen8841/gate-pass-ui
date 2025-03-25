@@ -48,7 +48,7 @@ const VisitorManagementSystem = () => {
           <Toolbar>
             {/* <img src={synthiteLogo} alt="abc" style={{width:"100px", height:"100px"}} /> */}
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Visitor Management System
+              Gate Pass System
             </Typography>
             <Button
               color="inherit"
@@ -81,7 +81,7 @@ const VisitorManagementSystem = () => {
           {view === "dashboard" && <DashboardReports />}
 
           {/* Check In Form */}
-          {view === "checkIn" && <CheckIn />}
+          {view === "checkIn" && <CheckIn setView={setView}/>}
 
           {/* Reports View */}
           {view === "reports" && <Reports />}
@@ -91,7 +91,7 @@ const VisitorManagementSystem = () => {
         <Box sx={{ bgcolor: "#212121", color: "white", py: 2, mt: "auto" }}>
           <Container>
             <Typography align="center">
-              © 2025 Visitor Management System | Current time:{" "}
+              © 2025 Gate Pass | Current time:{" "}
               {new Date().toLocaleTimeString()}
             </Typography>
           </Container>

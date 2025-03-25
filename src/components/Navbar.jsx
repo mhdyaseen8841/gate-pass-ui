@@ -18,6 +18,7 @@ import {
   Logout as LogoutIcon,
   Person as ProfileIcon
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ 
   user, 
@@ -26,7 +27,7 @@ const Navbar = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+const navigate = useNavigate();
   // Handle avatar click to open menu
   const handleAvatarClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -40,11 +41,17 @@ const Navbar = ({
   // Handle logout
   const handleLogout = () => {
     handleMenuClose();
-    onLogout();
+    localStorage.clear();
+    navigate('/login')
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static"
+    sx={{
+        backgroundColor: '#115ed6',
+    }}
+    
+    >
       <Toolbar>
         <Typography 
           variant="h6" 
@@ -80,18 +87,19 @@ const Navbar = ({
 
           {/* User Avatar */}
           <Avatar
+           variant="circular"
             sx={{ 
               width: 40, 
               height: 40, 
               ml: 2,
               cursor: 'pointer',
-              bgcolor: 'primary.main'
+              bgcolor: '#EF6C02'
             }}
             onClick={handleAvatarClick}
             alt={user?.name || "User"}
             src={user?.avatar}
           >
-            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+            {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
           </Avatar>
         </Box>
 
@@ -103,12 +111,12 @@ const Navbar = ({
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <MenuItem onClick={() => setView('profile')}>
+          {/* <MenuItem onClick={() => setView('profile')}>
             <ListItemIcon>
               <ProfileIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>Profile</ListItemText>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <LogoutIcon fontSize="small" />

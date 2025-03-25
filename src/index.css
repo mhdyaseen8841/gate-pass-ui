@@ -1,4 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 *{
     padding:0;
     margin: 0;
+}
+
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+/* Optional: Set font for specific elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', Arial, sans-serif;
 }

@@ -11,9 +11,13 @@ import {
   TableSortLabel,
   TablePagination,
   Typography,
-  Button
+  Button,
+  Grid,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { getCurrentVisitor } from '../services/VisitorAPI';
+import { exportToExcel, exportToPDF } from '../utils/ExportUtils';
 
 const CurrentVisitorReports = () => {
   const [allData, setAllData] = useState([]);
@@ -23,7 +27,7 @@ const CurrentVisitorReports = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const [exportType, setExportType] = useState('pdf');
 
   useEffect(() => {
     fetchVisitors();
@@ -68,11 +72,66 @@ const CurrentVisitorReports = () => {
     { id: 'checkInTime', label: 'Check-In Time', numeric: false },
   ];
 
+
+   const headers = ['Visit ID', 'Name', 'Company', 'Person To Visit', 'Purpose', 'Check-In Time'];
+  
+    const handleExport = () => {
+      const formattedData = sortedData.map(row => ({
+        'Visit ID': row.visit_id,
+        'Name': row.visitor_name,
+        'Company': row.company,
+        'Person To Visit': row.person_to_visit,
+        'Purpose': row.purpose,
+        'Check-In Time': row.check_in_time,
+      }));
+    
+      if (exportType === 'pdf') {
+        exportToPDF({
+          data: formattedData,
+          headers,
+          title: 'Check-In Reports',
+          fileName: 'visitor_report.pdf'
+        });
+      } else if (exportType === 'excel') {
+        exportToExcel({
+          data: formattedData,
+          headers,
+          title: 'Check-In Reports',
+          fileName: 'visitor_report.xlsx'
+        });
+      }
+    };
+    
+
   return (
     <Box sx={{ mx: 'auto', p: 2 }}>
-      <Typography variant="h5" gutterBottom component="div">
+   
+
+        <Grid container spacing={2} alignItems="center">
+                  
+
+                  <Grid item xs={12} sm={4} md={8}>
+                      <Typography variant="h5" gutterBottom component="div">
         Current Visitor Reports
       </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={2}>
+                    <Select
+                      value={exportType}
+                      onChange={(e) => setExportType(e.target.value)}
+                      fullWidth
+                      size="small"
+                    >
+                      <MenuItem value="pdf">PDF</MenuItem>
+                      <MenuItem value="excel">Excel</MenuItem>
+                    </Select>
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={2}>
+                    <Button variant="contained" onClick={handleExport} fullWidth>
+                      Export
+                    </Button>
+                  </Grid>
+                </Grid>
 
       {loading && <Typography>Loading...</Typography>}
       {error && <Typography color="error">{error}</Typography>}

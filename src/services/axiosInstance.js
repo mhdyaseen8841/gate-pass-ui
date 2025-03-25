@@ -5,7 +5,7 @@ export const baseURL = `http://localhost:4000/api`;
 
 //headers: defaultHeaders
 const createAxiosInstance = (baseURL, defaultHeaders = {}) => {
-  return axios.create({
+  const instance = axios.create({
     baseURL,
     headers: {
       "Content-Type": "application/json",
@@ -13,32 +13,35 @@ const createAxiosInstance = (baseURL, defaultHeaders = {}) => {
     },
     withCredentials: true,
   });
+
+  setupInterceptors(instance); // Apply interceptors after creating the instance
+  return instance;
 };
 
 // Function to setup interceptors
-// const setupInterceptors = (instance) => {
-//   instance.interceptors.request.use(
-//     (config) => {
-//       const token = localStorage.getItem('token');
-//       if (token) {
-//         config.headers.Authorization = `Bearer ${token}`;
-//       }
-//       return config;
-//     },
-//     (error) => {
-//       return Promise.reject(error);
-//     },
-//   );
+const setupInterceptors = (instance) => {
+  instance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
 
-//   instance.interceptors.response.use(
-//     (response) => {
-//       return response;
-//     },
-//     (error) => {
-//       return Promise.reject(error);
-//     },
-//   );
-// };
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
+};
 
 
 export const USER_INSTANCE = createAxiosInstance(`${baseURL}/users/`, {

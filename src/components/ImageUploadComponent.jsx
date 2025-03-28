@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button, Box, IconButton, Grid, Typography, Modal, Slider } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -8,7 +8,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import Webcam from 'react-webcam';
 import ReactCrop from 'react-image-crop';
 import '../assets/ReactCrop.css'
-const ImageUploadComponent = ({handleImageChange}) => {
+const ImageUploadComponent = ({handleImageChange,image}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isWebcamOpen, setIsWebcamOpen] = useState(false);
   const [isCropOpen, setIsCropOpen] = useState(false);
@@ -23,6 +23,13 @@ const ImageUploadComponent = ({handleImageChange}) => {
   });
   const [completedCrop, setCompletedCrop] = useState(null);
   
+  useEffect(() => {
+    if (image) {
+      setSelectedImage('');  
+    }
+  }, [image]);  
+
+
   const fileInputRef = useRef(null);
   const webcamRef = useRef(null);
   const imgRef = useRef(null);

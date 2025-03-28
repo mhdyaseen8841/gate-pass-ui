@@ -26,11 +26,11 @@ const VisitorManagementSystem = () => {
  const navigate = useNavigate();
   const [view, setView] = useState("dashboard"); 
 
-  // useEffect(() => {
-  //   if (!localStorage.getItem("token")) {
-  //     navigate("/login");
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <ThemeProvider theme={theme}>

@@ -28,7 +28,7 @@ const Login = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const encryptPassword = (password) => {
-    return CryptoJS.AES.encrypt(password, process.env.REACT_APP_SECRET_KEY).toString();
+    return CryptoJS.AES.encrypt(password, "crypto-gatePass@25@synthite").toString();
   };
 
   
@@ -41,14 +41,13 @@ const Login = ({ onLogin }) => {
     const encryptedPassword = encryptPassword(password);
     try {
 
-        data = {
+       let data = {
             user_name : username,
             psw : encryptedPassword
         }
         const response = await signInUserAPI(data);
-        
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', response.user);
+        localStorage.setItem('token', response.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.user));
         navigate('/')
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');

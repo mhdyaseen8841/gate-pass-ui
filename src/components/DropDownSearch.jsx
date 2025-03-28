@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 
-const DropdownSearch = ({ options, label, onChange, disabled }) => {
+const DropdownSearch = ({ options, label, onChange, disabled, formdata, isRequired=true }) => {
   const [selectedValue, setSelectedValue] = useState(null);
+
+  useEffect(() => {
+    if (formdata) {
+      setSelectedValue(null);  // Clears the child state
+    }
+  }, [formdata]);  // This will run whenever the triggerClear prop changes
 
   return (
     <Autocomplete
@@ -13,7 +19,9 @@ const DropdownSearch = ({ options, label, onChange, disabled }) => {
         setSelectedValue(newValue);
         if (onChange) onChange(newValue);
       }}
-      renderInput={(params) => <TextField {...params} label={label} variant="outlined" />}
+      renderInput={(params) => <TextField   required={isRequired} {...params} label={label} variant="outlined" />}
+
+      
       disabled={disabled}
     />
   );

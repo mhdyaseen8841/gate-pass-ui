@@ -52,13 +52,13 @@ const Reports = () => {
             indicatorColor="primary"
             textColor="primary"
           >
-            <Tab 
+            {/* <Tab 
               icon={<AssessmentIcon />} 
               iconPosition="start" 
               label="Reports" 
               id="visitor-tab-0" 
               aria-controls="visitor-tabpanel-0" 
-            />
+            /> */}
             <Tab 
               icon={<PersonIcon />} 
               iconPosition="start" 
@@ -76,13 +76,13 @@ const Reports = () => {
           </Tabs>
         </Box>
         
-        <TabPanel value={tabValue} index={0}>
+        {/* <TabPanel value={tabValue} index={0}>
           <Charts />
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
+        </TabPanel> */}
+        <TabPanel value={tabValue} index={0}>
           <CurrentVisitorReports />
         </TabPanel>
-        <TabPanel value={tabValue} index={2}>
+        <TabPanel value={tabValue} index={1}>
           <CheckInReports />
         </TabPanel>
       </Paper>

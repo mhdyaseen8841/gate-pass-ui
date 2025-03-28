@@ -28,6 +28,7 @@ import ImageUploadComponent from "./ImageUploadComponent";
 import AddDialog from "./AddDialog";
 import DropdownSearch from "./DropDownSearch";
 import { Business, Email, Person, Phone } from "@mui/icons-material";
+import { toast } from "react-toastify";
 
 const CheckIn = ({setView}) => {
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
@@ -43,6 +44,7 @@ const CheckIn = ({setView}) => {
     image: "",
     visitorType: "individual",
   });
+  const [form,setForm] = useState(false)
   const [companies, setCompanies] = useState([]);
   const [purpose, setPurpose] = useState([]);
   const [person, setPerson] = useState([]);
@@ -85,17 +87,44 @@ const CheckIn = ({setView}) => {
   };
 
   const handleImageChange = (data, url) => {
+    setImage(true)
     console.log(data);
     console.log(url);
     setCurrentVisitor({ ...currentVisitor, image: data });
   };
   // Handle check-in submission
   const handleCheckIn = () => {
+
+    if(!currentVisitor.name || !currentVisitor.personToVisit || !currentVisitor.purpose ||
+      !currentVisitor.image || !currentVisitor.company || !currentVisitor.phone || !currentVisitor.address
+    ) {
+      toast.error("Please fill all the required fields!");
+      return false
+    }
+
     const newVisitor = {
       ...currentVisitor,
     };
 
     console.log(newVisitor);
+    visitEntry(currentVisitor).then((res)=>{
+         toast.success("Visitor checked in successfully!");
+         setForm(true)
+         setCurrentVisitor({
+          name: "",
+          email: "",
+          phone: "",
+          address: "",
+          company: "",
+          personToVisit: "",
+          purpose: "",
+          remarks: "",
+          image: "",
+          visitorType: "individual",
+        });
+    }).catch((err)=>{
+        toast.error("Error checking in visitor!");
+    })
     // setVisitors([...visitors, newVisitor]);
     // setCurrentVisitor(null);
     // setView("dashboard");
@@ -143,6 +172,7 @@ const CheckIn = ({setView}) => {
                 label="Email Address"
                 name="email"
                 type="email"
+                
                 value={currentVisitor.email}
                 onChange={handleInputChange}
                  InputProps={{
@@ -168,7 +198,7 @@ const CheckIn = ({setView}) => {
         </Grid>
 
         <Grid item xs={12} md={6} >
-          <ImageUploadComponent handleImageChange={handleImageChange} />
+          <ImageUploadComponent image={form} handleImageChange={handleImageChange} />
         </Grid>
       </Grid>
       <Grid container spacing={3}>
@@ -200,6 +230,7 @@ const CheckIn = ({setView}) => {
             fullWidth
             label="Address"
             name="address"
+            required
             value={currentVisitor.address}
             onChange={handleInputChange}
             multiline
@@ -212,7 +243,11 @@ const CheckIn = ({setView}) => {
         <Grid item xs={12}>
           <FormControl fullWidth required>
             <DropdownSearch
-              options={purpose || []}
+                options={purpose ? purpose.map(p => ({
+                  label: p.purpose,
+                  value: p.purpose 
+                })) : []}
+                formdata={form}
               label="Purpose To Visit"
               onChange={(selected) =>
                 setCurrentVisitor({
@@ -261,8 +296,12 @@ const CheckIn = ({setView}) => {
         <Grid item xs={12} md={6}>
           <FormControl fullWidth required>
             <DropdownSearch
-              options={person || []}
+              options={person ? person.map(p => ({
+                label: p.person_name,
+                value: p.person_name 
+              })) : []}
               label="Person To Visit"
+              formdata={form}
               onChange={(selected) =>
                 setCurrentVisitor({
                   ...currentVisitor,
@@ -308,11 +347,11 @@ const CheckIn = ({setView}) => {
           variant="contained"
           color="secondary"
           onClick={handleCheckIn}
-          disabled={
-            !currentVisitor.name ||
-            !currentVisitor.personToVisit ||
-            !currentVisitor.purpose
-          }
+          // disabled={
+          //   !currentVisitor.name ||
+          //   !currentVisitor.personToVisit ||
+          //   !currentVisitor.purpose
+          // }
         >
           Complete Check-In
         </Button>

@@ -52,12 +52,21 @@ const CheckIn = ({setView}) => {
   async function addPersonDetails(person_name) {
     const data = await addPerson(selectedCompanyId, person_name);
     getPersonByCompanyId(selectedCompanyId);
+        setCurrentVisitor({
+      ...currentVisitor,
+      personToVisit: person_name, 
+    });
+ 
   }
 
   async function addPurposeName(purpose_name) {
    await addPurpose(purpose_name);
     fetchPurpose();
-    
+    setCurrentVisitor({
+      ...currentVisitor,
+      purpose: purpose_name, 
+    });
+ 
   }
 
   async function getPersonByCompanyId(companyId = null) {
@@ -265,6 +274,7 @@ const CheckIn = ({setView}) => {
                   value: p.purpose 
                 })) : []}
                 formdata={form}
+              value={currentVisitor.purpose}
               label="Purpose To Visit"
               onChange={(selected) =>
                 setCurrentVisitor({
@@ -319,21 +329,24 @@ const CheckIn = ({setView}) => {
               })) : []}
               label="Person To Visit"
               formdata={form}
+              value={currentVisitor.personToVisit}
               onChange={(selected) =>
                 setCurrentVisitor({
                   ...currentVisitor,
                   personToVisit: selected?.value,
                 })
               }
-              //  disabled={!selectedCompanyId}
+               disabled={!selectedCompanyId}
             />
-            <AddDialog
+            {selectedCompanyId && (
+              <AddDialog
               label="person"
               stateName="personToVisit"
               addData={addPersonDetails}
               setData={setPerson}
               setCurrentVisitor={setCurrentVisitor}
-            />
+              />
+            )}
           </FormControl>
         </Grid>
 

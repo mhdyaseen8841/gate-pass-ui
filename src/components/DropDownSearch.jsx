@@ -27,9 +27,13 @@ const DropdownSearch = ({ options, label, onChange, disabled, formdata,value, is
         if (onChange) onChange(newValue);
       }}
       renderInput={(params) => <TextField   required={isRequired} {...params} label={label} variant="outlined" />}
-
-      
       disabled={disabled}
+
+      filterOptions={(options, state) => {
+        // Filter based on the input value, but limit the number of results
+        const filtered = options.filter(option => option.label.toLowerCase().includes(state.inputValue.toLowerCase()));
+        return filtered.slice(0, 15);  // Limit the displayed options
+      }}
     />
   );
 };

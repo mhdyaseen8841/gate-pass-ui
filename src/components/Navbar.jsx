@@ -99,7 +99,7 @@ const navigate = useNavigate();
             alt={user?.name || "User"}
             src={user?.avatar}
           >
-            {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
+            {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
           </Avatar>
         </Box>
 

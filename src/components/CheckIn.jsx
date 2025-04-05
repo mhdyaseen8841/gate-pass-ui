@@ -57,6 +57,7 @@ const CheckIn = ({setView}) => {
   async function addPurposeName(purpose_name) {
    await addPurpose(purpose_name);
     fetchPurpose();
+    
   }
 
   async function getPersonByCompanyId(companyId = null) {
@@ -87,7 +88,6 @@ const CheckIn = ({setView}) => {
   };
 
   const handleImageChange = (data, url) => {
-    setImage(true)
     console.log(data);
     console.log(url);
     setCurrentVisitor({ ...currentVisitor, image: data });
@@ -95,21 +95,38 @@ const CheckIn = ({setView}) => {
   // Handle check-in submission
   const handleCheckIn = () => {
 
-    if(!currentVisitor.name || !currentVisitor.personToVisit || !currentVisitor.purpose ||
-      !currentVisitor.image || !currentVisitor.company || !currentVisitor.phone || !currentVisitor.address
-    ) {
-      toast.error("Please fill all the required fields!");
-      return false
+    if (!currentVisitor.name) {
+      toast.error("Name is required!");
+      return false;
+    } 
+    if (!currentVisitor.personToVisit) {
+      toast.error("Person to visit is required!");
+      return false;
+    }
+    if (!currentVisitor.purpose) {
+      toast.error("Purpose is required!");
+      return false;
+    }
+    if (!currentVisitor.image) {
+      toast.error("Image is required!");
+      return false;
+    }
+    if (!currentVisitor.company) {
+      toast.error("Company is required!");
+      return false;
+    }
+    if (!currentVisitor.phone) {
+      toast.error("Phone is required!");
+      return false;
+    }
+    if (!currentVisitor.address) {
+      toast.error("Address is required!");
+      return false;
     }
 
-    const newVisitor = {
-      ...currentVisitor,
-    };
 
-    console.log(newVisitor);
     visitEntry(currentVisitor).then((res)=>{
          toast.success("Visitor checked in successfully!");
-         setForm(true)
          setCurrentVisitor({
           name: "",
           email: "",
@@ -122,12 +139,12 @@ const CheckIn = ({setView}) => {
           image: "",
           visitorType: "individual",
         });
+        setForm(true)
+        // handleImageChange("", null);
     }).catch((err)=>{
         toast.error("Error checking in visitor!");
     })
-    // setVisitors([...visitors, newVisitor]);
-    // setCurrentVisitor(null);
-    // setView("dashboard");
+
   };
 
   return (
@@ -198,7 +215,7 @@ const CheckIn = ({setView}) => {
         </Grid>
 
         <Grid item xs={12} md={6} >
-          <ImageUploadComponent image={form} handleImageChange={handleImageChange} />
+          <ImageUploadComponent image={form} setImage={setForm} handleImageChange={handleImageChange} />
         </Grid>
       </Grid>
       <Grid container spacing={3}>
@@ -257,7 +274,7 @@ const CheckIn = ({setView}) => {
               }
             />
             <AddDialog
-              label="purpose"
+              label="Purpose"
               stateName="purpose"
               addData={addPurposeName}
               setData={setPurpose}

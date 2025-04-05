@@ -8,7 +8,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import Webcam from 'react-webcam';
 import ReactCrop from 'react-image-crop';
 import '../assets/ReactCrop.css'
-const ImageUploadComponent = ({handleImageChange,image}) => {
+const ImageUploadComponent = ({handleImageChange,image,setImage}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isWebcamOpen, setIsWebcamOpen] = useState(false);
   const [isCropOpen, setIsCropOpen] = useState(false);
@@ -26,6 +26,7 @@ const ImageUploadComponent = ({handleImageChange,image}) => {
   useEffect(() => {
     if (image) {
       setSelectedImage('');  
+      setImage(false)
     }
   }, [image]);  
 

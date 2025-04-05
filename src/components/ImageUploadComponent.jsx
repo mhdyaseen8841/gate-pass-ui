@@ -13,6 +13,7 @@ const ImageUploadComponent = ({handleImageChange,image,setImage}) => {
   const [isWebcamOpen, setIsWebcamOpen] = useState(false);
   const [isCropOpen, setIsCropOpen] = useState(false);
   const [tempImage, setTempImage] = useState(null);
+  const [videoConstraints, setVideoConstraints] = useState({});
   const [crop, setCrop] = useState({ 
     unit: '%', 
     width: 80, 
@@ -30,6 +31,22 @@ const ImageUploadComponent = ({handleImageChange,image,setImage}) => {
     }
   }, [image]);  
 
+
+  useEffect(() => {
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+      
+      // Find the first external camera (or any camera if USB detection fails)
+      const externalCamera = videoDevices.length > 1 ? videoDevices[1] : videoDevices[0];
+      
+      setVideoConstraints({
+        width: 480,
+        height: 480,
+        deviceId: externalCamera.deviceId,
+      });
+    });
+  }, []);
+  
 
   const fileInputRef = useRef(null);
   const webcamRef = useRef(null);
@@ -239,7 +256,22 @@ const applyCrop = useCallback(() => {
             </IconButton>
           </Box>
           
+
           <Webcam
+  audio={false}
+  ref={webcamRef}
+  screenshotFormat="image/jpeg"
+  videoConstraints={{
+    width: 480,
+    height: 480,
+    deviceId: videoConstraints.deviceId,  // Use the selected deviceId
+  }}
+  mirrored={true}
+  style={{ borderRadius: '8px' }}
+/>
+
+
+          {/* <Webcam
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
@@ -251,7 +283,7 @@ const applyCrop = useCallback(() => {
             mirrored={true}
             style={{ borderRadius: '8px' }}
           />
-          
+           */}
           <Button 
             variant="contained" 
             color="primary"

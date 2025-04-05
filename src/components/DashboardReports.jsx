@@ -59,6 +59,10 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) =>
 
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
+        <tr>
+            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Visit No:</td>
+            <td style={{ padding: "5px 0" }}>{visitor.visit_id}</td>
+          </tr>
           <tr>
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Name:</td>
             <td style={{ padding: "5px 0" }}>{visitor.visitor_name}</td>
@@ -116,7 +120,7 @@ const handleFilterChange = (event) => {
 
 // Modify the filteredVisitors list based on the filterType
 const filteredVisitors = visitorList.filter((visitor) => {
-  const matchesSearch = [visitor.visitor_name, visitor.person_to_visit]
+  const matchesSearch = [visitor.visitor_name, visitor.person_to_visit,visitor.visit_id]
     .join(" ")
     .toLowerCase()
     .includes(searchTerm.toLowerCase());
@@ -249,7 +253,7 @@ const filteredVisitors = visitorList.filter((visitor) => {
       {/* Search Box */}
       <TextField
         fullWidth
-        placeholder="Search visitors by name or person to visit..."
+        placeholder="Search visitors by name/id or person to visit..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         sx={{ mb: 3 }}
@@ -279,6 +283,7 @@ const filteredVisitors = visitorList.filter((visitor) => {
           <Table>
             <TableHead>
               <TableRow>
+              <TableCell>Visit No</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Company</TableCell>
                 <TableCell>Person To Visit</TableCell>
@@ -296,6 +301,7 @@ const filteredVisitors = visitorList.filter((visitor) => {
                     bgcolor: !visitor.check_out_time ? "#e3f2fd" : "inherit",
                   }}
                 >
+                  <TableCell>{visitor.visit_id}</TableCell>
                   <TableCell>{visitor.visitor_name}</TableCell>
                   <TableCell>{visitor.company}</TableCell>
                   <TableCell>{visitor.person_to_visit}</TableCell>

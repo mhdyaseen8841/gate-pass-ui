@@ -31,78 +31,283 @@ import { getVisitorDashboard, visitorCheckout } from "../services/VisitorAPI";
 import { toast } from "react-toastify";
 import { useReactToPrint } from "react-to-print";
 import {formatDateToIST} from "../utils/DateUtils"
+import './printStyles.css';
+
+// const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => 
+//     {
+//     return(
+//   <div ref={ref} style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+//     <div style={{ textAlign: "center", marginBottom: "20px" }}>
+//       <h1 style={{ margin: "0" }}>Visitor Badge</h1>
+//       <p style={{ margin: "5px 0" }}>Syntite</p>
+//     </div>
+
+//     <div style={{ border: "2px solid #000", padding: "15px", borderRadius: "5px" }}>
+//       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
+//         <div>
+//           <h2 style={{ margin: "0 0 10px 0" }}>VISITOR</h2>
+//           <h3 style={{ margin: "0" }}>{visitor.badge}</h3>
+//         </div>
+//         <div style={{ width: "100px", height: "100px", border: "1px solid #ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
+//           {visitor.photo ? (
+//             <img src={visitor.photo} alt="Visitor" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+//           ) : (
+//             <span>Photo</span>
+//           )}
+//         </div>
+//       </div>
+
+//       <table style={{ width: "100%", borderCollapse: "collapse" }}>
+//         <tbody>
+//         <tr>
+//             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Visit No:</td>
+//             <td style={{ padding: "5px 0" }}>{visitor.visit_id}</td>
+//           </tr>
+//           <tr>
+//             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Name:</td>
+//             <td style={{ padding: "5px 0" }}>{visitor.visitor_name}</td>
+//           </tr>
+//           <tr>
+//             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Company:</td>
+//             <td style={{ padding: "5px 0" }}>{visitor.company}</td>
+//           </tr>
+//           <tr>
+//             <td style={{ padding: "5px 0", fontWeight: "bold" }}>personToVisit:</td>
+//             <td style={{ padding: "5px 0" }}>{visitor.person_to_visit}</td>
+//           </tr>
+//           <tr>
+//             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Purpose:</td>
+//             <td style={{ padding: "5px 0" }}>{visitor.purpose}</td>
+//           </tr>
+//           <tr>
+//             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-in Time:</td>
+//             <td style={{ padding: "5px 0" }}>{new Date(visitor.check_in_time).toLocaleString()}</td>
+//           </tr>
+
+//           <tr>
+//             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-out Time:</td>
+//             <td style={{ padding: "5px 0" }}>{new Date(visitor.check_out_time).toLocaleString()}</td>
+//           </tr>
+//         </tbody>
+//       </table>
+
+//       <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
+//         <p style={{ margin: "0", fontSize: "12px" }}>This badge must be worn visibly at all times while on premises.</p>
+//         <p style={{ margin: "5px 0 0 0", fontSize: "12px" }}>Please return this badge at the reception desk when checking out.</p>
+//       </div>
+//     </div>
+
+//     <div style={{ marginTop: "20px", fontSize: "12px", textAlign: "center" }}>
+//       <p>For security assistance, please call 555-123-4567</p>
+//     </div>
+//   </div>
+// )});
+
+const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => {
+  return (
+    <div ref={ref} className="font-size" style={{ 
+      height: '100vh',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',  // This centers vertically
+      alignItems: 'flex-start', // This keeps left alignment    // Add some left padding
+      boxSizing: 'border-box',
+      
+    }}>
+<Grid container spacing={2}>
+
+<Grid style={{paddingLeft:'20px'}} item xs={12} md={4}>
+  
+  <div style={{paddingTop:"45px"}}>
+<p  >Pass No : {visitor.visit_id}</p>
+  <p >Check In : {formatDateToIST(visitor.check_in_time)}</p> 
+  </div>
 
 
-const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => 
-    {
-    return(
-  <div ref={ref} style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
-    <div style={{ textAlign: "center", marginBottom: "20px" }}>
-      <h1 style={{ margin: "0" }}>Visitor Badge</h1>
-      <p style={{ margin: "5px 0" }}>Syntite</p>
-    </div>
-
-    <div style={{ border: "2px solid #000", padding: "15px", borderRadius: "5px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
-        <div>
-          <h2 style={{ margin: "0 0 10px 0" }}>VISITOR</h2>
-          <h3 style={{ margin: "0" }}>{visitor.badge}</h3>
-        </div>
-        <div style={{ width: "100px", height: "100px", border: "1px solid #ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
+  <div style={{ marginBottom: '12px',marginLeft: '155px',marginTop:'32px' }}>
           {visitor.photo ? (
-            <img src={visitor.photo} alt="Visitor" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img
+              src={visitor.photo}
+              alt="Visitor"
+              style={{
+                width: '80px',
+                height: '80px',
+                objectFit: 'cover',
+                borderRadius: '5px',
+                border: '1px solid #000',
+              }}
+            />
           ) : (
-            <span>Photo</span>
+            <div
+              style={{
+                width: '80px',
+                height: '80px',
+                border: '1px dashed #aaa',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#777',
+                fontSize: '12px',
+              }}
+            >
+              No Photo
+            </div>
           )}
         </div>
-      </div>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <tbody>
-        <tr>
-            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Visit No:</td>
-            <td style={{ padding: "5px 0" }}>{visitor.visit_id}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Name:</td>
-            <td style={{ padding: "5px 0" }}>{visitor.visitor_name}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Company:</td>
-            <td style={{ padding: "5px 0" }}>{visitor.company}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: "5px 0", fontWeight: "bold" }}>personToVisit:</td>
-            <td style={{ padding: "5px 0" }}>{visitor.person_to_visit}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Purpose:</td>
-            <td style={{ padding: "5px 0" }}>{visitor.purpose}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-in Time:</td>
-            <td style={{ padding: "5px 0" }}>{new Date(visitor.check_in_time).toLocaleString()}</td>
-          </tr>
 
-          <tr>
-            <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-out Time:</td>
-            <td style={{ padding: "5px 0" }}>{new Date(visitor.check_out_time).toLocaleString()}</td>
-          </tr>
-        </tbody>
-      </table>
+  <table >
+          <tbody>
+            <tr>
+              <td><strong>Name:</strong></td>
+              <td>{visitor.visitor_name}</td>
+            </tr>
+            <tr>
+              <td><strong>Address:</strong></td>
+              <td>{visitor.address}</td>
+            </tr>
+            <tr>
+              <td><strong>Company:</strong></td>
+              <td>{visitor.company}</td>
+            </tr>
+            <tr>
+              <td><strong>Person To Visit:</strong></td>
+              <td>{visitor.person_to_visit}</td>
+            </tr>
+            <tr>
+              <td><strong>Purpose:</strong></td>
+              <td>{visitor.purpose}</td>
+            </tr>
+          
+           
+          </tbody>
+        </table>
+  </Grid>
+<Grid container xs={12} md={4} style={{paddingTop: 10,paddingLeft:'20px'}}>
+    <Grid item md={6} style={{paddingTop:10,paddingLeft:10}} >
+    <p>{formatDateToIST(visitor.check_in_time)}</p> 
+  <p style={{paddingTop:'10px',paddingLeft:'20px'}}> {visitor.visit_id}</p>
+  <p style={{paddingTop:'10px',paddingLeft:'60px'}}> {visitor.visitor_name}</p>
+  <p  style={{paddingTop:'10px',paddingLeft:'60px'}}>  {visitor.person_to_visit}</p>
 
-      <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
-        <p style={{ margin: "0", fontSize: "12px" }}>This badge must be worn visibly at all times while on premises.</p>
-        <p style={{ margin: "5px 0 0 0", fontSize: "12px" }}>Please return this badge at the reception desk when checking out.</p>
-      </div>
+
+  {/* <p> Pupose of visit : {visitor.purpose}</p> */}
+    </Grid>
+
+
+    <Grid item md={6} style={{paddingTop:'20px'}} >
+   
+  <p>Address: {visitor.address}</p>
+  <p style={{paddingTop:'18px'}}>Company: {visitor.company}</p>
+  <p style={{paddingTop:'10px'}}> Pupose of visit : {visitor.purpose}</p>
+    </Grid>
+
+  </Grid>
+
+
+  </Grid>
+
+<div>
+
+</div>
+
     </div>
+    
+  )})
 
-    <div style={{ marginTop: "20px", fontSize: "12px", textAlign: "center" }}>
-      <p>For security assistance, please call 555-123-4567</p>
-    </div>
-  </div>
-)});
+// const VisitorPrintTemplate1 = React.forwardRef(({ visitor }, ref) => {
+//   return (
+//     <div ref={ref} className="visitor-badge-print" style={{ width: '100%', height: '100%' }}>
+//       <div
+//         style={{
+//           width: '90mm',              // Width of the VISITORS PASS area (adjust as needed)
+//           height: '100%',             // Full height of the page
+//           padding: '10mm 8mm',        // Top-bottom, side paddings
+//           boxSizing: 'border-box',
+//           fontFamily: 'Arial, sans-serif',
+//         }}
+//       >
+       
 
+//         {/* Visitor Photo */}
+//         <p>Pass No : {visitor.visit_id}</p>  <p>Check In : {formatDateToIST(visitor.check_in_time)}</p> 
+//         <div style={{ marginBottom: '12px',marginLeft: '145px' }}>
+//           {visitor.photo ? (
+//             <img
+//               src={visitor.photo}
+//               alt="Visitor"
+//               style={{
+//                 width: '80px',
+//                 height: '80px',
+//                 objectFit: 'cover',
+//                 borderRadius: '5px',
+//                 border: '1px solid #000',
+//               }}
+//             />
+//           ) : (
+//             <div
+//               style={{
+//                 width: '80px',
+//                 height: '80px',
+//                 border: '1px dashed #aaa',
+//                 display: 'flex',
+//                 alignItems: 'center',
+//                 justifyContent: 'center',
+//                 color: '#777',
+//                 fontSize: '12px',
+//               }}
+//             >
+//               No Photo
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Visitor Info Table */}
+//         <table style={{ width: '100%', fontSize: '12px', borderSpacing: '4px 2px' }}>
+//           <tbody>
+//             <tr>
+//               <td><strong>Name:</strong></td>
+//               <td>{visitor.visitor_name}</td>
+//             </tr>
+//             <tr>
+//               <td><strong>Address:</strong></td>
+//               <td>{visitor.address}</td>
+//             </tr>
+//             <tr>
+//               <td><strong>Company:</strong></td>
+//               <td>{visitor.company}</td>
+//             </tr>
+//             <tr>
+//               <td><strong>To Visit:</strong></td>
+//               <td>{visitor.person_to_visit}</td>
+//             </tr>
+//             <tr>
+//               <td><strong>Purpose:</strong></td>
+//               <td>{visitor.purpose}</td>
+//             </tr>
+          
+           
+//           </tbody>
+//         </table>
+//       </div>
+
+//       <div
+//         style={{
+//           width: '90mm',              // Width of the VISITORS PASS area (adjust as needed)
+//           height: '100%',             // Full height of the page
+//           padding: '10mm 8mm',        // Top-bottom, side paddings
+//           boxSizing: 'border-box',
+//           fontFamily: 'Arial, sans-serif',
+//         }}
+//       >
+
+//         <p>Pass No : {visitor.visit_id}</p>  <p>Check Out : {formatDateToIST(visitor.check_out_time)}</p>
+
+//         </div>
+//     </div>
+//   );
+// });
 
 const DashboardReports = () => {
   const [currentVisitors, setCurrentVisitors] = useState(0);
@@ -203,11 +408,38 @@ const filteredVisitors = visitorList.filter((visitor) => {
       content: () => printComponentRef.current,
     });
   
-    const handlePrint = useReactToPrint({
-      documentTitle: 'Title',
-      contentRef: printComponentRef,
-   })
+  //   const handlePrint = useReactToPrint({
+  //     documentTitle: 'Title',
+  //     contentRef: printComponentRef,
+  //     pageStyle: '@media print { @page { size: landscape; } }',
+  //  })
+   
+   const handlePrint = useReactToPrint({
+    documentTitle: 'Title',
+    contentRef: printComponentRef,
+    pageStyle: `
+      @page {
+        size: auto;
+        margin: 0;
+      }
+        @media print {
+      body {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        margin: 0;
+        padding-left: 20px;
+      }
+      html {
+        height: 100%;
+      }
+    }
+    `,
+  });
 
+   
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       {/* Stats Cards */}

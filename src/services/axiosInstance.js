@@ -39,6 +39,10 @@ const setupInterceptors = (instance) => {
       return response;
     },
     (error) => {
+      if (error.response && error.response.status === 401) {
+       localStorage.clear();
+        window.location.href = '/login'; 
+      }
       return Promise.reject(error);
     },
   );

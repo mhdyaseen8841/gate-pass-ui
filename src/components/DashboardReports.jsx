@@ -30,7 +30,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { getVisitorDashboard, visitorCheckout } from "../services/VisitorAPI"; 
 import { toast } from "react-toastify";
 import { useReactToPrint } from "react-to-print";
-
+import {formatDateToIST} from "../utils/DateUtils"
 
 
 const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => 
@@ -264,8 +264,8 @@ const filteredVisitors = visitorList.filter((visitor) => {
 
       {/* Visitors Table */}
       <Paper elevation={2}>
-      <Box sx={{ display: "flex",px:5,py:2, justifyContent: "space-between", mb: 2 }}>
-  <Typography variant="h6">Visitor Log</Typography>
+      <Box sx={{ display: "flex",px:5,py:2, alignItems:'center', justifyContent: "space-between", mb: 2 }}>
+  <Typography variant="h6">Visitor Logs</Typography>
 
   <FormControl sx={{ minWidth: 150 }}>
     <InputLabel>Filter</InputLabel>
@@ -300,8 +300,8 @@ const filteredVisitors = visitorList.filter((visitor) => {
                   <TableCell>{visitor.company}</TableCell>
                   <TableCell>{visitor.person_to_visit}</TableCell>
                   <TableCell>{visitor.purpose}</TableCell>
-                  <TableCell>{visitor.check_in_time}</TableCell>
-                  <TableCell>{visitor.check_out_time || "-"}</TableCell>
+                  <TableCell>{formatDateToIST(visitor.check_in_time)}</TableCell>
+                  <TableCell>{visitor.check_out_time ? formatDateToIST(visitor.check_out_time) : "-"}</TableCell>
                   <TableCell>
                     <Box sx={{ display: "flex", gap: 1 }}>
                       <Button

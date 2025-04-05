@@ -23,6 +23,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { getVisitorReport } from "../services/VisitorAPI";
 
+import {formatDateToIST} from "../utils/DateUtils"
+import SearchIcon from '@mui/icons-material/Search';
+
 const CheckInReports = () => {
   const today = dayjs().format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(today);
@@ -30,7 +33,7 @@ const CheckInReports = () => {
   const [visitorData, setVisitorData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [orderBy, setOrderBy] = useState("visit_id");
   const [order, setOrder] = useState("asc");
   const [exportType, setExportType] = useState("pdf");
@@ -69,14 +72,27 @@ const CheckInReports = () => {
   ];
 
   const handleExport = () => {
+
+    const currentDateTime = new Date();
+        const offsetIST = 5.5 * 60;  // IST is UTC +5:30 hours (5.5 hours)
+        const currentDateTimeIST = new Date(currentDateTime.getTime() + offsetIST * 60 * 1000);
+        
+        // Format the IST date and time
+        const formattedDateTime = currentDateTimeIST
+          .toISOString()
+          .replace('T', '_')
+          .replace(/\..+/, '')
+          .replace(/-/g, '_');
+        
+
     const formattedData = filteredData.map((row) => ({
       "Visit ID": row.visit_id,
-      Name: row.visitor_name,
-      Company: row.company,
+      "Name": row.visitor_name,
+      "Company": row.company,
       "Person To Visit": row.person_to_visit,
-      Purpose: row.purpose,
-      "Check-In Time": row.check_in_time,
-      "Check-Out Time": row.check_out_time,
+      "Purpose": row.purpose,
+      "Check-In Time": row.check_in_time ? formatDateToIST(row.check_in_time) : "",
+      "Check-Out Time": row.check_out_time ? formatDateToIST(row.check_out_time) : "",
     }));
 
     if (exportType === "pdf") {
@@ -84,14 +100,14 @@ const CheckInReports = () => {
         data: formattedData,
         headers,
         title: "Check-In Reports",
-        fileName: "visitor_report.pdf",
+        fileName : `check_in_report_${formattedDateTime}.pdf`
       });
     } else if (exportType === "excel") {
       exportToExcel({
         data: formattedData,
         headers,
         title: "Check-In Reports",
-        fileName: "visitor_report.xlsx",
+        fileName : `check_in_report_${formattedDateTime}.xlsx`
       });
     }
   };
@@ -135,6 +151,7 @@ const CheckInReports = () => {
                 onClick={handleApplyFilters}
                 fullWidth
               >
+                <SearchIcon style={{ marginRight: '8px' }} />
                 Apply
               </Button>
             </Grid>
@@ -191,8 +208,8 @@ const CheckInReports = () => {
                       <TableCell>{row.company}</TableCell>
                       <TableCell>{row.person_to_visit}</TableCell>
                       <TableCell>{row.purpose}</TableCell>
-                      <TableCell>{row.check_in_time}</TableCell>
-                      <TableCell>{row.check_out_time}</TableCell>
+                      <TableCell>{formatDateToIST(row.check_in_time)}</TableCell>
+                      <TableCell>{row.check_out_time ? formatDateToIST(row.check_out_time) : "-"}</TableCell>
                     </TableRow>
                   ))}
               </TableBody>

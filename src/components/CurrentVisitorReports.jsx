@@ -18,13 +18,14 @@ import {
 } from '@mui/material';
 import { getCurrentVisitor } from '../services/VisitorAPI';
 import { exportToExcel, exportToPDF } from '../utils/ExportUtils';
+import {formatDateToIST} from "../utils/DateUtils"
 
 const CurrentVisitorReports = () => {
   const [allData, setAllData] = useState([]);
   const [orderBy, setOrderBy] = useState('visit_id');
   const [order, setOrder] = useState('asc');
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [exportType, setExportType] = useState('pdf');
@@ -76,28 +77,42 @@ const CurrentVisitorReports = () => {
    const headers = ['Visit ID', 'Name', 'Company', 'Person To Visit', 'Purpose', 'Check-In Time'];
   
     const handleExport = () => {
+
+      const currentDateTime = new Date();
+      const offsetIST = 5.5 * 60;  // IST is UTC +5:30 hours (5.5 hours)
+      const currentDateTimeIST = new Date(currentDateTime.getTime() + offsetIST * 60 * 1000);
+      
+      // Format the IST date and time
+      const formattedDateTime = currentDateTimeIST
+        .toISOString()
+        .replace('T', '_')
+        .replace(/\..+/, '')
+        .replace(/-/g, '_');
+      
+
       const formattedData = sortedData.map(row => ({
         'Visit ID': row.visit_id,
         'Name': row.visitor_name,
         'Company': row.company,
         'Person To Visit': row.person_to_visit,
         'Purpose': row.purpose,
-        'Check-In Time': row.check_in_time,
+        'Check-In Time': row.check_in_time ? formatDateToIST(row.check_in_time) : "",
       }));
     
       if (exportType === 'pdf') {
+      
         exportToPDF({
           data: formattedData,
           headers,
-          title: 'Check-In Reports',
-          fileName: 'visitor_report.pdf'
+          title: 'Current Visitor Reports',
+          fileName : `current_visitor_report_${formattedDateTime}.pdf`
         });
       } else if (exportType === 'excel') {
         exportToExcel({
           data: formattedData,
           headers,
-          title: 'Check-In Reports',
-          fileName: 'visitor_report.xlsx'
+          title: 'Current Visitor Reports',
+          fileName : `current_visitor_report_${formattedDateTime}.xlsx`
         });
       }
     };
@@ -163,7 +178,7 @@ const CurrentVisitorReports = () => {
                     <TableCell>{row.company}</TableCell>
                     <TableCell>{row.person_to_visit}</TableCell>
                     <TableCell>{row.purpose}</TableCell>
-                    <TableCell>{row.check_in_time}</TableCell>
+                    <TableCell>{formatDateToIST(row.check_in_time)}</TableCell>
                     <TableCell>
                     </TableCell>
                   </TableRow>

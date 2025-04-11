@@ -398,7 +398,7 @@ const filteredVisitors = visitorList.filter((visitor) => {
 //   );
 
 
-  const handlePrintVisitor = (visitor) => {
+   const handlePrintVisitor = (visitor) => {
     setSelectedVisitor(visitor);
     setPrintDialogOpen(true);
   };

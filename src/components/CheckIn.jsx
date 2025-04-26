@@ -29,6 +29,10 @@ import AddDialog from "./AddDialog";
 import DropdownSearch from "./DropDownSearch";
 import { Business, Email, Person, Phone } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import { useReactToPrint } from 'react-to-print';
+import { useRef } from 'react';
+import VisitorPrintTemplate from './VisitorPrintTemplate';
+import LoadingOverlay from "./LoadingOverlay";
 
 const CheckIn = ({setView}) => {
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
@@ -48,6 +52,50 @@ const CheckIn = ({setView}) => {
   const [companies, setCompanies] = useState([]);
   const [purpose, setPurpose] = useState([]);
   const [person, setPerson] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const printComponentRef = useRef(null);
+   const reactToPrintFn = useReactToPrint({
+        content: () => printComponentRef.current,
+      });
+    
+
+  const [printData, setPrintData] = useState(null);
+  
+
+
+
+
+     const handlePrint = useReactToPrint({
+      documentTitle: 'Visitor Pass',
+      contentRef: printComponentRef,
+      pageStyle: `
+        @page {
+          size: auto;
+          margin: 0;
+        }
+          @media print {
+        body {
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          margin: 0;
+          padding-left: 20px;
+        }
+        html {
+          height: 100%;
+        }
+      }
+      `,
+      onAfterPrint: () => {
+            setPrintData(null);
+          },
+    });
+  
+     
+    
 
   async function addPersonDetails(person_name) {
     const data = await addPerson(selectedCompanyId, person_name);
@@ -133,9 +181,22 @@ const CheckIn = ({setView}) => {
       return false;
     }
 
-
+setLoading(true);
     visitEntry(currentVisitor).then((res)=>{
          toast.success("Visitor checked in successfully!");
+setLoading(false);
+         setPrintData({
+          ...res,
+          visitor_name: currentVisitor.name,
+          company: currentVisitor.company,
+          person_to_visit: currentVisitor.personToVisit,
+          purpose: currentVisitor.purpose,
+          address: currentVisitor.address,
+          photo: currentVisitor.image,
+          check_in_time: new Date().toISOString(),
+          visit_id: res.visit_id // Assuming the API returns a visit_id
+        });
+
          setCurrentVisitor({
           name: "",
           email: "",
@@ -149,14 +210,28 @@ const CheckIn = ({setView}) => {
           visitorType: "individual",
         });
         setForm(true)
-        // handleImageChange("", null);
+       
+
     }).catch((err)=>{
         toast.error("Error checking in visitor!");
     })
 
   };
 
+  useEffect(() => {
+    if (printData && !loading) {
+      const timeout = setTimeout(() => {
+        handlePrint();
+      }, 100); // slight delay to ensure render
+  
+      return () => clearTimeout(timeout); // cleanup
+    }
+  }, [printData]);
+  
+
   return (
+    <>
+    {loading && <LoadingOverlay />}
     <Paper elevation={3} sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
       <Typography 
           variant="h4" 
@@ -397,6 +472,16 @@ const CheckIn = ({setView}) => {
         </Button>
       </Box>
     </Paper>
+
+    <div style={{ display: "none" }}>
+  {printData && !loading && (
+    <VisitorPrintTemplate
+      ref={printComponentRef}
+      visitor={printData}
+    />
+  )}
+</div>
+    </>
   );
 };
 

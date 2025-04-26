@@ -19,6 +19,9 @@ import {
 import CryptoJS from "crypto-js";
 import {signInUserAPI} from '../services/authAPI.js';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+
+
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -33,40 +36,34 @@ const Login = ({ onLogin }) => {
 
   
   const handleLogin = async () => {
-
     if (!username || !password) {
       setError('Please enter both username and password');
       return;
     }
+  
     const encryptedPassword = encryptPassword(password);
+    const data = {
+      user_name: username,
+      psw: encryptedPassword,
+    };
+  
     try {
-
-       let data = {
-            user_name : username,
-            psw : encryptedPassword
-        }
-        const response = await signInUserAPI(data);
-        localStorage.setItem('token', response.accessToken);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        navigate('/')
+      const response = await signInUserAPI(data); // 🔄 await instead of .then()
+  
+      if (!response || !response.accessToken) {
+        throw new Error("Invalid credentials");
+      }
+  
+      localStorage.setItem('token', response.accessToken);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      navigate('/');
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      console.error(err);
+      toast.error(err.message || "Failed to login. Please try again.");
     }
   };
+  
 
-  const loginUser = async (username, password) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    if (username === 'admin' && password === 'password') {
-      return { 
-        username, 
-        token: 'mock-auth-token',
-        name: 'John Doe' 
-      };
-    } else {
-      throw new Error('Invalid username or password');
-    }
-  };
 
   return (
     <Box 

@@ -370,18 +370,28 @@ const CheckIn = ({setView}) => {
           gap: 2,
         }}
       >
-        <Button variant="outlined" onClick={() => setView("dashboard")}>
+        <Button variant="outlined" onClick={() => setView("dashboard")}
+           sx={{
+            color: 'red', // 🔴 Set text color for cancel
+            borderColor: 'red',
+            '&:hover': {
+              backgroundColor: '#ffe5e5',
+              borderColor: 'darkred'
+            }
+          }}>
           Cancel
         </Button>
         <Button
           variant="contained"
           color="secondary"
           onClick={handleCheckIn}
-          // disabled={
-          //   !currentVisitor.name ||
-          //   !currentVisitor.personToVisit ||
-          //   !currentVisitor.purpose
-          // }
+          sx={{
+            backgroundColor: "#4CAF50",
+            color: "#fff", // ✅ Set white text color
+            "&:hover": {
+              backgroundColor: "#45a049",
+            },
+          }}
         >
           Complete Check-In
         </Button>

@@ -1,7 +1,9 @@
 import axios from "axios";
 
 // export const baseURL = `http://localhost:4000/api`;
-export const baseURL = `http://172.20.10.3:4000/api`;
+// export const baseURL = `http://172.20.10.3:4000/api`;
+// test 
+export const baseURL = `http://192.168.1.6:4000/api`;
   // process.env.REACT_APP_API_URL || `http://localhost:4000/api`;
 
 //headers: defaultHeaders

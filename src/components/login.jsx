@@ -8,7 +8,8 @@ import {
   InputAdornment, 
   IconButton,
   Snackbar,
-  Alert
+  Alert,
+  CircularProgress
 } from '@mui/material';
 import { 
   Person as PersonIcon, 
@@ -27,7 +28,7 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const encryptPassword = (password) => {
@@ -40,7 +41,7 @@ const Login = ({ onLogin }) => {
       setError('Please enter both username and password');
       return;
     }
-  
+    setLoading(true);
     const encryptedPassword = encryptPassword(password);
     const data = {
       user_name: username,
@@ -60,6 +61,8 @@ const Login = ({ onLogin }) => {
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Failed to login. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading regardless of success or failure
     }
   };
   
@@ -145,21 +148,26 @@ const Login = ({ onLogin }) => {
           }}
         />
 
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={handleLogin}
-          sx={{ 
-            mt: 2,
-            py: 1.5,
-            fontWeight: 600,
-            textTransform: 'none'
-          }}
-        >
-          Sign In
-        </Button>
+<Button
+  fullWidth
+  variant="contained"
+  color="primary"
+  size="large"
+  onClick={handleLogin}
+  disabled={loading}
+  sx={{ 
+    mt: 2,
+    py: 1.5,
+    fontWeight: 600,
+    textTransform: 'none'
+  }}
+>
+  {loading ? (
+    <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+  ) : (
+    "Sign In"
+  )}
+</Button>
 
         {/* Forgot Password Link */}
         {/* <Typography 

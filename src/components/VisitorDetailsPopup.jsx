@@ -1,3 +1,5 @@
+import { formatDateToIST } from "../utils/DateUtils";
+
 const VisitorDetailsPopup = ( ({ visitor }) => 
     {
     return(
@@ -46,25 +48,27 @@ const VisitorDetailsPopup = ( ({ visitor }) =>
           </tr>
           <tr>
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-in Time:</td>
-            <td style={{ padding: "5px 0" }}>{new Date(visitor.check_in_time).toLocaleString()}</td>
+            <td style={{ padding: "5px 0" }}>{formatDateToIST(visitor.check_in_time)}</td>
           </tr>
 
           <tr>
+           
             <td style={{ padding: "5px 0", fontWeight: "bold" }}>Check-out Time:</td>
-            <td style={{ padding: "5px 0" }}>{new Date(visitor.check_out_time).toLocaleString()}</td>
+            <td style={{ padding: "5px 0" }}>{visitor.check_out_time ? formatDateToIST(visitor.check_out_time) : "-"}</td>
           </tr>
+          
         </tbody>
       </table>
 
       <div style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
-        <p style={{ margin: "0", fontSize: "12px" }}>This badge must be worn visibly at all times while on premises.</p>
-        <p style={{ margin: "5px 0 0 0", fontSize: "12px" }}>Please return this badge at the reception desk when checking out.</p>
+        <p style={{ margin: "0", fontSize: "12px" }}>Visitor Details Page for view only.</p>
+        <p style={{ margin: "5px 0 0 0", fontSize: "12px" }}>Please click the PRINT button to print slip.</p>
       </div>
     </div>
 
-    <div style={{ marginTop: "20px", fontSize: "12px", textAlign: "center" }}>
+    {/* <div style={{ marginTop: "20px", fontSize: "12px", textAlign: "center" }}>
       <p>For security assistance, please call 555-123-4567</p>
-    </div>
+    </div> */}
   </div>
 )});
 

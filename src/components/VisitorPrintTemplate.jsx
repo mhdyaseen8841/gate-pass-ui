@@ -16,6 +16,7 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => {
         alignItems: "flex-start",
         boxSizing: "border-box",
       }}
+      className="font-size"
     >
       <Grid container spacing={2}>
         <Grid style={{ paddingLeft: "20px" }} item xs={12} md={4}>

@@ -6,7 +6,7 @@ const VisitorDetailsPopup = ( ({ visitor }) =>
   <div  style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
     <div style={{ textAlign: "center", marginBottom: "20px" }}>
       <h1 style={{ margin: "0" }}>Visitor Badge</h1>
-      <p style={{ margin: "5px 0" }}>Syntite</p>
+      <p style={{ margin: "5px 0" }}>Synthite</p>
     </div>
 
     <div style={{ border: "2px solid #000", padding: "15px", borderRadius: "5px" }}>

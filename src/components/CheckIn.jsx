@@ -186,15 +186,14 @@ setLoading(true);
          toast.success("Visitor checked in successfully!");
 setLoading(false);
          setPrintData({
-          ...res,
+          visit_id: res?.[0]?.[""] ?? "",
           visitor_name: currentVisitor.name,
           company: currentVisitor.company,
           person_to_visit: currentVisitor.personToVisit,
           purpose: currentVisitor.purpose,
           address: currentVisitor.address,
           photo: currentVisitor.image,
-          check_in_time: new Date().toISOString(),
-          visit_id: res.visit_id // Assuming the API returns a visit_id
+          check_in_time: new Date().toISOString()
         });
 
          setCurrentVisitor({
@@ -213,6 +212,7 @@ setLoading(false);
        
 
     }).catch((err)=>{
+      console.log(err)
         toast.error("Error checking in visitor!");
     })
 

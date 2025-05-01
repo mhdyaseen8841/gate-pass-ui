@@ -33,18 +33,25 @@ const ImageUploadComponent = ({handleImageChange,image,setImage}) => {
 
 
   useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then((devices) => {
-      const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-      
-      // Find the first external camera (or any camera if USB detection fails)
-      const externalCamera = videoDevices.length > 1 ? videoDevices[1] : videoDevices[0];
-      
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+        const externalCamera = videoDevices.length > 1 ? videoDevices[1] : videoDevices[0];
+        
+        setVideoConstraints({
+          width: 480,
+          height: 480,
+          deviceId: externalCamera.deviceId,
+        });
+      });
+    } else {
+      console.warn('enumerateDevices() not supported.');
       setVideoConstraints({
         width: 480,
         height: 480,
-        deviceId: externalCamera.deviceId,
+        facingMode: "user", // fallback
       });
-    });
+    }
   }, []);
   
 

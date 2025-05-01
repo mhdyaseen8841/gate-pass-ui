@@ -8,7 +8,8 @@ import {
   InputAdornment, 
   IconButton,
   Snackbar,
-  Alert
+  Alert,
+  CircularProgress
 } from '@mui/material';
 import { 
   Person as PersonIcon, 
@@ -19,12 +20,15 @@ import {
 import CryptoJS from "crypto-js";
 import {signInUserAPI} from '../services/authAPI.js';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+
+
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const encryptPassword = (password) => {
@@ -33,40 +37,36 @@ const Login = ({ onLogin }) => {
 
   
   const handleLogin = async () => {
-
     if (!username || !password) {
       setError('Please enter both username and password');
       return;
     }
+    setLoading(true);
     const encryptedPassword = encryptPassword(password);
+    const data = {
+      user_name: username,
+      psw: encryptedPassword,
+    };
+  
     try {
-
-       let data = {
-            user_name : username,
-            psw : encryptedPassword
-        }
-        const response = await signInUserAPI(data);
-        localStorage.setItem('token', response.accessToken);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        navigate('/')
+      const response = await signInUserAPI(data); // 🔄 await instead of .then()
+  
+      if (!response || !response.accessToken) {
+        throw new Error("Invalid credentials");
+      }
+  
+      localStorage.setItem('token', response.accessToken);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      navigate('/');
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      console.error(err);
+      toast.error(err.message || "Failed to login. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading regardless of success or failure
     }
   };
+  
 
-  const loginUser = async (username, password) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    if (username === 'admin' && password === 'password') {
-      return { 
-        username, 
-        token: 'mock-auth-token',
-        name: 'John Doe' 
-      };
-    } else {
-      throw new Error('Invalid username or password');
-    }
-  };
 
   return (
     <Box 
@@ -148,21 +148,26 @@ const Login = ({ onLogin }) => {
           }}
         />
 
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={handleLogin}
-          sx={{ 
-            mt: 2,
-            py: 1.5,
-            fontWeight: 600,
-            textTransform: 'none'
-          }}
-        >
-          Sign In
-        </Button>
+<Button
+  fullWidth
+  variant="contained"
+  color="primary"
+  size="large"
+  onClick={handleLogin}
+  disabled={loading}
+  sx={{ 
+    mt: 2,
+    py: 1.5,
+    fontWeight: 600,
+    textTransform: 'none'
+  }}
+>
+  {loading ? (
+    <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+  ) : (
+    "Sign In"
+  )}
+</Button>
 
         {/* Forgot Password Link */}
         {/* <Typography 

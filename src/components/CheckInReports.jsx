@@ -16,6 +16,9 @@ import {
   Typography,
   MenuItem,
   Select,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
 import { exportToPDF, exportToExcel } from "../utils/ExportUtils";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
@@ -25,6 +28,12 @@ import { getVisitorReport } from "../services/VisitorAPI";
 
 import {formatDateToIST} from "../utils/DateUtils"
 import SearchIcon from '@mui/icons-material/Search';
+
+
+import VisitorDetailsPopup from './VisitorDetailsPopup';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+
 
 const CheckInReports = () => {
   const today = dayjs().format("YYYY-MM-DD");
@@ -37,6 +46,10 @@ const CheckInReports = () => {
   const [orderBy, setOrderBy] = useState("visit_id");
   const [order, setOrder] = useState("asc");
   const [exportType, setExportType] = useState("pdf");
+
+
+const [selectedVisitor, setSelectedVisitor] = useState(null);
+const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 
   const fetchVisitors = async (fromDate, toDate) => {
     try {
@@ -112,6 +125,10 @@ const CheckInReports = () => {
     }
   };
 
+  const handleViewDetails = (visitor) => {
+    setSelectedVisitor(visitor);
+    setDetailsDialogOpen(true);
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ mx: "auto", p: 2 }}>
@@ -196,6 +213,9 @@ const CheckInReports = () => {
                   <TableCell>Purpose</TableCell>
                   <TableCell>Check-In Time</TableCell>
                   <TableCell>Check-Out Time</TableCell>
+                  <TableCell>
+Actions
+</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -210,12 +230,27 @@ const CheckInReports = () => {
                       <TableCell>{row.purpose}</TableCell>
                       <TableCell>{formatDateToIST(row.check_in_time)}</TableCell>
                       <TableCell>{row.check_out_time ? formatDateToIST(row.check_out_time) : "-"}</TableCell>
+                      <TableCell>
+  <Button
+    variant="contained"
+    size="small"
+    startIcon={<VisibilityIcon />}
+    onClick={() => handleViewDetails(row)}
+    sx={{
+      bgcolor: "#1976d2",
+      "&:hover": { bgcolor: "#1565c0" }
+    }}
+  >
+    View
+  </Button>
+</TableCell>
                     </TableRow>
                   ))}
               </TableBody>
             </Table>
           </TableContainer>
 
+         
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
@@ -229,6 +264,31 @@ const CheckInReports = () => {
           />
         </Paper>
       </Box>
+    
+      <Dialog 
+  open={detailsDialogOpen} 
+  onClose={() => setDetailsDialogOpen(false)}
+  maxWidth="md"
+  fullWidth
+>
+  <DialogTitle>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Typography variant="h6">Visitor Details</Typography>
+      <Button
+        variant="outlined"
+        onClick={() => setDetailsDialogOpen(false)}
+      >
+        Close
+      </Button>
+    </Box>
+  </DialogTitle>
+  <DialogContent>
+    {selectedVisitor && (
+      <VisitorDetailsPopup visitor={selectedVisitor} />
+    )}
+  </DialogContent>
+</Dialog>
+
     </LocalizationProvider>
   );
 };

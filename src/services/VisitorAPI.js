@@ -98,3 +98,12 @@ export async function addPerson(company_id, person_name, user="admin") {
     throw error;
   }
 }
+
+export async function searchVisitorReport(search_text, purpose) {
+  try {
+    const response = await VISITOR_INSTANCE.get(`/searchVisitorReport?search_text=${search_text}&purpose=${purpose}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

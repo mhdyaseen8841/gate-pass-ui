@@ -238,7 +238,7 @@ const CheckIn = ({ setView }) => {
           purpose: currentVisitor.purpose,
           address: currentVisitor.address,
           photo: currentVisitor.image,
-          check_in_time: new Date().toISOString(),
+          check_in_time: new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString(),
         });
 
         setCurrentVisitor({

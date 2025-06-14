@@ -20,11 +20,11 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => {
     >
       <Grid container spacing={2}>
         <Grid style={{ paddingLeft: "20px" }} item xs={12} md={4}>
-          <div style={{ paddingTop: "45px" }}>
-            <p>Pass No : {visitor.visit_id}</p>
-            <p>Check In : {formatDateToIST(visitor.check_in_time)}</p>
+          <div style={{ paddingTop: "20px" }}>
+            <p  style={{ paddingBottom: "0px" }}>Pass No : {visitor.visit_id}</p>
+            <p style={{ paddingBottom: "0x" }}>Check In : {formatDateToIST(visitor.check_in_time)}</p>
           </div>
-          <div style={{ marginBottom: "12px", marginLeft: "155px", marginTop: "32px" }}>
+          <div style={{ marginBottom: "12px", marginLeft: "155px", marginTop: "100px" }}>
             {visitor.photo ? (
               <img
                 src={visitor.photo}
@@ -79,14 +79,14 @@ const VisitorPrintTemplate = React.forwardRef(({ visitor }, ref) => {
             </tbody>
           </table>
         </Grid>
-        <Grid container xs={12} md={4} style={{ paddingTop: 10, paddingLeft: "20px" }}>
-          <Grid item md={6} style={{ paddingTop: 10, paddingLeft: 10 }}>
+        <Grid container xs={12} md={4} style={{ paddingTop: 0, paddingLeft: "18px" }}>
+          <Grid item md={6} style={{ paddingTop: 0, paddingLeft: 10 }}>
             <p>{formatDateToIST(visitor.check_in_time)}</p>
             <p style={{ paddingTop: "10px", paddingLeft: "20px" }}> {visitor.visit_id}</p>
             <p style={{ paddingTop: "10px", paddingLeft: "60px" }}> {visitor.visitor_name}</p>
             <p style={{ paddingTop: "10px", paddingLeft: "60px" }}> {visitor.person_to_visit}</p>
           </Grid>
-          <Grid item md={6} style={{ paddingTop: "20px" }}>
+          <Grid item md={6} style={{ paddingTop: "10px" }}>
             <p>Address: {visitor.address}</p>
             <p style={{ paddingTop: "18px" }}>Company: {visitor.company}</p>
             <p style={{ paddingTop: "10px" }}> Pupose of visit : {visitor.purpose}</p>

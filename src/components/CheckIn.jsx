@@ -107,6 +107,7 @@ const CheckIn = ({ setView }) => {
       address: visitor.address || "",
       visitorType: visitor.visitor_type || "individual",
       image: visitor.photo || "",
+      remarks: visitor.remarks || "",
     });
     
     setSearchDialogOpen(false);
@@ -154,6 +155,7 @@ const CheckIn = ({ setView }) => {
   }
 
   async function addPurposeName(purpose_name) {
+    debugger;
     await addPurpose(purpose_name);
     fetchPurpose();
     setCurrentVisitor({
